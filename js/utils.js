@@ -18,6 +18,12 @@ function formatTime(value) {
     //---
     if (value < 1) return Math.ceil(value * 1000) + ' <small class="opacity-50">ms</small>'
     //---
+    if (value > 31536000e3) return formatNumber(value / 31536000) + '<small class="opacity-50">yr</small>'
+    //---
+    if (value > 31536000) return Math.floor(value / 31536000) + '<small class="opacity-50">yr</small> ' + formatTime(value % 31536000)
+    //---
+    if (value > 86400) return Math.floor(value / 86400) + '<small class="opacity-50">d</small> ' + formatTime(value % 86400)
+    //---
     let h = Math.floor(value / 3600)
     if (h < 10) { h = '0' + h }
     //---
