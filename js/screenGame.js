@@ -501,14 +501,19 @@ class ScreenGame {
         //---
         else if (action == 'assignAll') {
             //---
-            window.app.game.addMachineCount(data.itemId)
-            //---
             let item = window.app.game.getItem(data.itemId)
             if (item.inputs) {
+                let inputs = []
                 for (let id in item.inputs) {
-                    this.doClick('assignAll', { itemId:id })
+                    inputs.push(id)
+                }
+                inputs.reverse()
+                for (let id in inputs) {
+                    this.doClick('assignAll', { itemId:inputs[id] })
                 }
             }
+            //---
+            window.app.game.addMachineCount(data.itemId)
         }
     }
     //---
