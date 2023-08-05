@@ -160,7 +160,7 @@ var DATA = {
                 {	name:'portable-fusion-reactor',	reqs:{ 'portable-fusion-reactor-tech':1 },	machine:'assembler',	time:10,	output:1,	inputs:{ 'circuit-3':200, 'low-density-structure':50 }	},
                 {	name:'radar',	reqs:{ 'mission-equipment':1 },	machine:'assembler',	time:0.5,	output:1,	inputs:{ 'iron-plate':10, 'gear':5, 'circuit':5 }	},
                 {	name:'rocket-control-unit',	reqs:{ 'rocket-control-unit-tech':1 },	machine:'assembler',	time:30,	output:1,	inputs:{ 'speed-module':1, 'circuit-3':1 }	},
-                {	name:'rocket-launcher',	reqs:{ 'rocketry':1 },	machine:'assembler',	time:10,	inputs:{ 'iron-plate':5, 'gear':5, 'circuit':5 }	},
+                {	name:'rocket-launcher',	reqs:{ 'rocketry':1 },	machine:'assembler',	time:10,	output:1,	inputs:{ 'iron-plate':5, 'gear':5, 'circuit':5 }	},
                 {	name:'speed-module',	reqs:{ 'speed':1 },	machine:'assembler',	time:15,	output:1,	inputs:{ 'circuit':5, 'circuit-2':5 }	},
                 //---
                 {	name:'exoskeleton-tech',	reqs:{ 'mission-equipment':1 },	machine:'lab',	time:30*50,	output:1,	inputs:{ 'red-pack':50, 'green-pack':50, 'blue-pack':50 }	},
