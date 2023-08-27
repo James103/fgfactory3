@@ -9,16 +9,16 @@ var en_translations = {
     'screenLoading_text': 'Initializing game...',
     //---
     'screenError_text': 'An error occured during game loading',
-    'screenError_info1': 'To ask for help, you could contact <span class="text-white">Freddec</span> on Discord with following exported data',
-    'screenError_info2': 'Or you could wipe your local data to restart the game from the beginning',
+    'screenError_info1': 'To ask for help, you can contact <span class="text-white">Freddec</span> on Discord with the following exported data.',
+    'screenError_info2': 'Alternatively, you can wipe your local data to restart the game from the beginning.',
     //---
     'modalWipe_title': 'Wipe Local Data',
     'modalWipe_text': 'Are you sure to want to wipe your local data?',
-    'modalWipe_info': 'You will lost all your progression from all scenarios and restart from the beginning',
+    'modalWipe_info': 'You will lose all your progression from all scenarios and restart from the beginning.',
     //---
     'modalOffline_title': 'Offline Gains',
     'modalOffline_text': 'Welcome back!',
-    'modalOffline_info': 'You were away',
+    'modalOffline_info': 'You were away for',
     //---
     'modalVictory_title': 'Victory',
     'modalVictory_subTitle': 'Congratulations',
@@ -27,7 +27,7 @@ var en_translations = {
     //---
     'modalScenario_title': 'Change scenario',
     'modalScenario_text': 'Are you sure you want to change scenario?',
-    'modalScenario_info': 'You will lose your current progression and you will start the new scenario at the beginning',
+    'modalScenario_info': 'You will lose your current progression and you will start the new scenario at the beginning.',
     //---
     'toast_export': 'Local data copied in clipboard!',
     'toast_importEmpty': 'No data to import!',
@@ -40,7 +40,7 @@ var en_translations = {
     'btn_wipeSave': 'Wipe',
     //---
     'text_iconsBy': 'Icons provided by',
-    'text_love': 'This game has been designed and built with all the love <i class="fa-fw fas fa-heart text-danger"></i> in the world by <div class="fs-6 text-white">Freddec</div>',
+    'text_love': 'This game has been designed and built with all the love <i class="fa-fw fas fa-heart text-danger"></i> in the world by <div class="fs-6 text-white">Freddec</div>.',
     //---
     'text_patreon': 'Become a supporter',
     'text_kofi': 'Buy me a Ko-fi',
@@ -80,26 +80,26 @@ var en_translations = {
 
     //---
     'fto1-name': 'Factorio',
-    'fto1-desc': 'Scenario inspired by <span class="text-white">Factorio</span> game in normal mode.',
+    'fto1-desc': 'Scenario inspired by the <span class="text-white">Factorio</span> game in normal mode.',
     
     //---
     'fto1-mission-furnace': 'Stone furnace',
-    'fto1-mission-furnace-desc': '<div class="mb-2">Welcome!</div><div class="border text-center text-danger p-2 mb-2">This is a prototype. Development is still in progress. Data loss and reset could happen.</div><div class="mb-2">You crashed on an hostile planet. Your goal is to escape from there. To do it you will build many machines and items. I will guide you throw all objectives to explain how to reach your goal.</div><div class="mb-2">Your first objective here is to build a Stone furnace which is the first machine that allows you to smelt items from ores. You have 1 Steel axe and 1 Mining drill, assign them to respective line to start production.</div>',
+    'fto1-mission-furnace-desc': '<div class="mb-2">Welcome!</div><div class="border text-center text-danger p-2 mb-2">This is a prototype. Development is still in progress. Data loss and reset can happen.</div><div class="mb-2">You crashed on an hostile planet. Your goal is to escape from there. To do it, you will build many machines and items. I will guide you through all objectives and explain how to reach your goal.</div><div class="mb-2">Your first objective here is to build a Stone furnace, which is the first machine that allows you to smelt items from ores. You have 1 Steel axe and 1 Mining drill; assign them to respective lines to start production.</div>',
     //---
     'fto1-mission-assembler': 'Assembling machine',
-    'fto1-mission-assembler-desc': '<div class="mb-2">When machines are unlocked you could build as many units as you want, there is no limit but machine could be built with Steel axe only and you have 1 unique Steel axe.</div><div class="mb-2">You could assign multiple machine units to the same production line and when line is done, machines will be unassigned automatically (except for machines themselves since there is no limit).</div><div class="mb-2">The number on green background indicated you the number of available units that could be assigned.</div><div class="mb-2">Let\'s build several units of Stone furnaces and 1 Assembling machine!</div>',
+    'fto1-mission-assembler-desc': '<div class="mb-2">When machines are unlocked, you can build as many units as you want; there is no limit. Machines can be built with Steel axe only and you have 1 unique Steel axe.</div><div class="mb-2">You can assign multiple machine units to the same production line and when line is done, machines will be unassigned automatically (except for machines themselves since there is no limit).</div><div class="mb-2">The number on green background indicates to you the number of available units that can be assigned.</div><div class="mb-2">Let\'s build several units of Stone furnaces and 1 Assembling machine!</div>',
     //---
     'fto1-mission-lab': 'Lab',
     'fto1-mission-lab-desc': '<div class="mb-2">Now you know how to build machine units. For more complex items, you will need to research some technologies to be able to build thems. To perform researches, you need a Lab.</div><div class="mb-2">You will be able to build multiple units of Lab like other machines.</div>',
     //---
     'fto1-mission-car': 'Car',
-    'fto1-mission-car-desc': '<div class="mb-2">Car is the first complex item that you have to build. Before being able to build it you have to perform researches with Labs.</div><div class="mb-2">Links are displayed to redirect you to the tech to research. Be carefull: some techs require other techs before being unlocked ;)</div>',
+    'fto1-mission-car-desc': '<div class="mb-2">Car is the first complex item that you have to build. Before being able to build it, you have to perform researches with Labs.</div><div class="mb-2">Links are displayed to redirect you to the tech to research. Be carefull: some techs require other techs before being unlocked! ;)</div>',
     //---
     'fto1-mission-train': 'Train',
     'fto1-mission-train-desc': '<div class="mb-2">Trains are useful for moving large amounts of items over large distances. Locomotives are also good vehicles for you to reach fixed destinations, as they are considerably faster than the Car. Finally, Train stops are used to automate item transportation by trains by providing nameable locations for trains to travel to.</div>',
     //---
     'fto1-mission-defense': 'Defense',
-    'fto1-mission-defense-desc': '<div class="mb-2">As you are on an hostile planet, you have to defend your factory and yourself. Walls are a defensive structure that prevents both the player and enemies from passing. They can be used to shield Gun turrets so they will be able to fight enemies longer without being destroyed, and can be used to protect parts of the factory from enemies.</div><div class="mb-2">Gates are a variant of walls that act as a safe opening in walls that only you can use. Then Tank is a heavy armored fighting vehicle with a submachine gun, a short range flamethrower and a powerful cannon.</div>',
+    'fto1-mission-defense-desc': '<div class="mb-2">As you are on an hostile planet, you have to defend your factory and yourself. Walls are a defensive structure that prevents both the player and enemies from passing. They can be used to shield Gun turrets so they will be able to fight enemies longer without being destroyed, and can be used to protect parts of the factory from enemies.</div><div class="mb-2">Gates are a variant of walls that act as a safe opening in walls that only you can use. The Tank is a heavy armored fighting vehicle with a submachine gun, a short range flamethrower and a powerful cannon.</div>',
     //---
     'fto1-mission-equipment': 'Equipment',
     'fto1-mission-equipment-desc': '<div class="mb-2">Factory protections are in place so now it is time to protect yourselves. Power armor MK2 is the ultimate in personal protection and customization. Equipment modules can be added to Power armor MK2 to give you various bonuses.</div>',
@@ -108,7 +108,7 @@ var en_translations = {
     'fto1-mission-spidertron-desc': '<div class="mb-2">The spidertron is a versatile vehicle capable of traversing rough terrain. It\'s equipped with four fast-firing rocket launchers capable of manual or automatic targeting.</div>',
     //---
     'fto1-mission-rocket': 'Rocket part',
-    'fto1-mission-rocket-desc': '<div class="mb-2">Rocket parts are created inside of the Rocket silo. Each completed part contributes 1% towards the completion of the rocket. Once all 100 rocket parts have been completed, the Rocket silo will have a rocket ready to be launched within the silo.</div><div class="mb-2">One more step and you will be able to escape from this hostile planet!</div>',
+    'fto1-mission-rocket-desc': '<div class="mb-2">Rocket parts are created inside of the Rocket silo. Each completed part contributes 1% towards the completion of the rocket. Once all 100 rocket parts have been completed, the Rocket silo will have a rocket ready to be launched within.</div><div class="mb-2">One more step and you will be able to escape from this hostile planet!</div>',
     //---
     'fto1-mission-satellite': 'Satellite',
     'fto1-mission-satellite-desc': '<div class="mb-2">The Satellite is used to navigate through Space. The crafted Satellite must be placed into the Rocket before launch. Then you leave from this hostile planet...</div>',
@@ -145,7 +145,7 @@ var en_translations = {
     'fto1-copper': 'Copper ore',
     'fto1-copper-plate': 'Copper plate',
     'fto1-engine': 'Engine unit',
-    'fto1-engine-2': 'Eclectric engine unit',
+    'fto1-engine-2': 'Electric engine unit',
     'fto1-explosives': 'Explosives',
     'fto1-exoskeleton': 'Exoskeleton',
     'fto1-flamethrower': 'Flamethrower',
