@@ -40,7 +40,7 @@ function formatNumber(value, fixed) {
     //---
     let ret = '', symbol = null
     //---
-    if (absValue >= 1e30) {
+    if (absValue >= 1e33) {
         let start = 33
         for (let i = 0; i < 26; ++i) {
             for (let j = 0; j < 26; ++j) {
@@ -54,7 +54,8 @@ function formatNumber(value, fixed) {
             if (ret != '') break
         }
     }
-    else if (absValue >= 1e27) { ret = (Math.floor(100 * absValue / 1e27) / 100); symbol = 'B'; }
+    else if (absValue >= 1e30) { ret = (Math.floor(100 * absValue / 1e30) / 100); symbol = 'Q'; }
+    else if (absValue >= 1e27) { ret = (Math.floor(100 * absValue / 1e27) / 100); symbol = 'R'; }
     else if (absValue >= 1e24) { ret = (Math.floor(100 * absValue / 1e24) / 100); symbol = 'Y'; }
     else if (absValue >= 1e21) { ret = (Math.floor(100 * absValue / 1e21) / 100); symbol = 'Z'; }
     else if (absValue >= 1e18) { ret = (Math.floor(100 * absValue / 1e18) / 100); symbol = 'E'; }

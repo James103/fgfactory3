@@ -75,7 +75,9 @@ class GameItem {
             //---
             for (let id in this.recipe.inputs) {
                 //---
-                let item = new GameItem({ id:this.id + '-' + id, cat:'item', recipeName:id, stack:(this.stack == Infinity ? 1 : this.stack) * (this.recipe.inputs[id] / this.recipe.output), toComplete:this.toComplete })
+                let cost = Math.max(this.recipe.inputs[id], (this.stack == Infinity ? 1 : this.stack) * (this.recipe.inputs[id] / this.recipe.output))
+                //---
+                let item = new GameItem({ id:this.id + '-' + id, cat:'item', recipeName:id, stack:cost, toComplete:this.toComplete })
                 game.currentItems.push(item)
                 item.reset(game)
                 //---
