@@ -455,7 +455,7 @@ a:hover { color: var(--bs-link-hover-color); }
 }
 
 #left-pane {
-    z-index: 1000; position: absolute; top: 0; bottom: 0; left: -100%;
+    z-index: 1000; position: absolute; top: 0; bottom: 46px; left: -100%;
     width: 100%;
     transition: left .5s ease;
 }
@@ -469,7 +469,7 @@ a:hover { color: var(--bs-link-hover-color); }
 }
 
 #right-pane {
-    position: absolute; top: 0; bottom: 0;
+    position: absolute; top: 0; bottom: 46px;
     width: 100%;
 }
 

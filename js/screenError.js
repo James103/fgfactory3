@@ -33,7 +33,7 @@ var TplScreenError = function() {
                 html += '</button>'
             html += '</div>'
             html += '<div class="col-4 col-lg-3">'
-                html += '<button type="button" class="w-100 btn btn btn-warning" onclick="window.app.downloadSave()">'
+                html += '<button type="button" class="w-100 btn btn btn-warning px-0" onclick="window.app.downloadSave()">'
                     html += '<span><i class="fas fa-fw fa-download"></i></span>'
                     html += '<span class="ms-1">' + i18next.t('btn_downloadSave') + '</span>'
                 html += '</button>'

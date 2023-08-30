@@ -58,7 +58,6 @@ class GameItem {
         this.totalCount = this.count
         //---
         this.status = 'wait'
-        this.collapsed = false
         //---
         this.name = this.recipe.name
         this.output = this.recipe.output
@@ -98,7 +97,6 @@ class GameItem {
         //---
         if (data.count != null) this.count = data.count
         if (data.status != null) this.status = data.status
-        if (data.collapsed != null) this.collapsed = data.collapsed
         if (data.totalCount != null) this.totalCount = data.totalCount
         if (data.machineCount != null) this.machineCount = data.machineCount
         if (data.remainingTime != null) this.remainingTime = data.remainingTime
@@ -119,7 +117,6 @@ class GameItem {
         //---
         savedData.count = this.count
         savedData.status = this.status
-        savedData.collapsed = this.collapsed
         savedData.totalCount = this.totalCount
         savedData.machineCount = this.machineCount
         savedData.remainingTime = this.remainingTime
