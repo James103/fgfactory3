@@ -51,6 +51,7 @@ var en_translations = {
     'tab_options': 'Options',
     'tab_scenarios': 'Scenarios',
     //---
+    'cat-energy': 'Energy',
     'cat-machine': 'Machines',
     'cat-mission': 'Missions',
     'cat-tech': 'Techs',
@@ -60,6 +61,7 @@ var en_translations = {
     'word-close': 'Close',
     'word-continue': 'Continue',
     'word-done': 'Done',
+    'word-energy': 'Energy',
     'word-language': 'Language',
     'word-local-data': 'Local Data',
     'word-max': 'Max',
@@ -77,13 +79,13 @@ var en_translations = {
     
     //---
     'fto1-mission-furnace': 'Stone furnace',
-    'fto1-mission-furnace-desc': '<div class="border border-danger text-center text-danger small p-2 mb-2">This is a prototype. Development is still in progress. Data loss and reset can happen.</div><div class="mb-2">Welcome!</div><div class="mb-2">You crashed on an hostile planet. Your goal is to escape from there. To do it, you will build many machines and items. I will guide you through all objectives and explain how to reach your goal.</div><div class="mb-2">Your first objective here is to build a Stone furnace, which is the first machine that allows you to smelt items from ores. You have 1 Steel axe and 1 Mining drill; assign them to respective lines to start production.</div>',
+    'fto1-mission-furnace-desc': '<div class="border border-danger text-center text-danger small p-2 mb-2">This is a prototype. Development is still in progress. Data loss and reset can happen.</div><div class="mb-2">Welcome!</div><div class="mb-2">You crashed on an hostile planet. Your goal is to escape from there. To do it, you will build many machines and items. I will guide you through all objectives and explain how to reach your goal.</div><div class="mb-2">Your first objective here is to build a Stone furnace, which is the first machine that allows you to smelt items from ores. You have 1 Steel axe and 1 Mining drill; assign them to respective lines to start production.</div><div class="mb-2">Attention point: before assignng machines, you have to produce enough energy ;)</div>',
     //---
     'fto1-mission-assembler': 'Assembling machine',
     'fto1-mission-assembler-desc': '<div class="mb-2">When machines are unlocked, you can build as many units as you want; there is no limit. Machines can be built with Steel axe only and you have 1 unique Steel axe.</div><div class="mb-2">You can assign multiple machine units to the same production line and when line is done, machines will be unassigned automatically (except for machines themselves since there is no limit).</div><div class="mb-2">The number on green background indicates to you the number of available units that can be assigned.</div><div class="mb-2">Let\'s build several units of Stone furnaces and 1 Assembling machine!</div>',
     //---
     'fto1-mission-lab': 'Lab',
-    'fto1-mission-lab-desc': '<div class="mb-2">Now you know how to build machine units. For more complex items, you will need to research some technologies to be able to build thems. To perform researches, you need a Lab.</div><div class="mb-2">You will be able to build multiple units of Lab like other machines.</div>',
+    'fto1-mission-lab-desc': '<div class="mb-2">Now you know how to build machine units. For more complex items, you will need to research some technologies to be able to build thems. To perform researches, you need a Lab.</div><div class="mb-2">You will be able to build multiple units of Lab like other machines.</div><div class="mb-2">Attention point: Assembling machines like other machines require Electricity as energy. Electricity is produced thank to other energies ;)</div>',
     //---
     'fto1-mission-car': 'Car',
     'fto1-mission-car-desc': '<div class="mb-2">Car is the first complex item that you have to build. Before being able to build it, you have to perform researches with Labs.</div><div class="mb-2">Attention point: some techs may require other techs before being unlocked! ;)</div>',
@@ -107,18 +109,31 @@ var en_translations = {
     'fto1-mission-satellite-desc': '<div class="mb-2">The Satellite is used to navigate through Space. The crafted Satellite must be placed into the Rocket before launch. Then you leave from this hostile planet...</div>',
     
     //---
+    'fto1-electricity': 'Electricity',
+    'fto1-energy-coal': 'Coal',
+    'fto1-energy-water': 'Water',
+    'fto1-steam': 'Steam',
+    
+    //---
     'fto1-assembler': 'Assembling machine',
     'fto1-assembler-2': 'Assembling machine 2',
     'fto1-assembler-3': 'Assembling machine 3',
+    'fto1-boiler': 'Boiler',
     'fto1-chemical-plant': 'Chemical plant',
     'fto1-furnace': 'Stone furnace',
     'fto1-lab': 'Lab',
     'fto1-manual': 'Steel axe',
     'fto1-miner': 'Mining drill',
+    'fto1-miner-coal': 'Coal drill',
     'fto1-pump': 'Offshore pump',
     'fto1-pumpjack': 'Pumpjack',
     'fto1-refinery': 'Oil refinery',
     'fto1-rocket-silo': 'Rocket silo',
+    'fto1-steam-engine': 'Steam engine',
+
+    //---
+    'fto1-assembler-desc': 'This is the first available crafting machine. It is used in most recipes, including in its own recipe.',
+    'fto1-furnace-desc': 'The Stone furnace is the most basic smelting machinery, providing a cheap and reliable source of basic products like Iron plates and Copper plates.',
     
     //---
     'fto1-accumulator': 'Accumulator',

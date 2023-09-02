@@ -62,6 +62,8 @@ class GameItem {
         this.machineCount = 0
         this.selectMachineCount = '1'
         //---
+        this.balance = 0
+        //---
         this.parentItem = null
         //---
         if (recipe.inputs) {
@@ -71,7 +73,9 @@ class GameItem {
             //---
             for (let id in recipe.inputs) {
                 //---
-                let item = new GameItem({ id:this.id + '-' + id, cat:'item', recipeId:id, max:recipe.inputs[id], toComplete:this.toComplete })
+                let cat = this.cat == 'energy' ? 'energy' : 'item'
+                //---
+                let item = new GameItem({ id:this.id + '-' + id, cat:cat, recipeId:id, max:recipe.inputs[id], toComplete:this.toComplete })
                 game.currentItems.push(item)
                 item.reset(game)
                 //---
@@ -221,6 +225,7 @@ class Game {
         if (data.scenarios) this.scenarios.forEach(scenario => { if (data.scenarios[scenario.id]) scenario.load(data.scenarios[scenario.id]) })
         //---
         this.refreshUnlocked()
+        this.refreshEnergies()
     }
     //---
     getSaveData() {
@@ -259,6 +264,26 @@ class Game {
     refreshUnlocked() {
         //---
         this.currentItems.filter(item => item.reqs).forEach(item => { item.unlocked = this.checkReqs(item.reqs) })
+    }
+    //---
+    refreshEnergies() {
+        //---
+        let energies = this.currentItems.filter(item => item.cat == 'energy')
+        energies.forEach(energy => {
+            //---
+            energy.balance = 0
+        })
+        //---
+        let machines = this.currentItems.filter(item => item.cat == 'machine')
+        machines.forEach(machine => {
+            //---
+            let usedCount = this.getUsedCount(machine.id)
+            for (let id in machine.energies) {
+                //---
+                let energy = this.getItem(id)
+                energy.balance += usedCount * machine.energies[id]
+            }
+        })
     }
     //---
     isVictoryReached() {
@@ -323,7 +348,7 @@ class Game {
         //---
         let refresh = false
         //---
-        let items = this.currentItems.filter(item => item.machineCount > 0)
+        let items = this.currentItems.filter(item => item.machineCount > 0 && item.cat != 'energy')
         items.forEach(item => {
             //---
             let seconds = stepMs / 1000
@@ -392,6 +417,8 @@ class Game {
                             refresh = true
                             this.refreshUnlocked()
                         }
+                        //---
+                        this.refreshEnergies()
                     }
                     //---
                     if (this.canProduce(item)) {
@@ -436,6 +463,13 @@ class Game {
         //---
         if (this.getAvailableCount(item.machineId) < addCount) return false
         //---
+        let machine = this.getItem(item.machineId)
+        for (let id in machine.energies) {
+            //---
+            let energy = this.getItem(id)
+            if (energy.balance < -addCount * machine.energies[id]) return false
+        }
+        //---
         return true
     }
     //---
@@ -447,6 +481,8 @@ class Game {
             let addCount = item.getAddMachineCount(this)
             item.machineCount += addCount
             item.refreshTime()
+            //---
+            this.refreshEnergies()
         }
     }
     //---
@@ -466,6 +502,8 @@ class Game {
             let removeCount = item.getRemoveMachineCount()
             item.machineCount -= removeCount
             item.refreshTime()
+            //---
+            this.refreshEnergies()
         }
     }
 }

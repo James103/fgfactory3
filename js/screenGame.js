@@ -23,7 +23,7 @@ var TplScreenGame = function(data) {
                     html += '<div class="col-auto">'
                         html += '<div class="dropdown">'
                             html += '<button type="button" class="btn btn-outline-danger" data-bs-toggle="dropdown" aria-expanded="false">'
-                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.17'
+                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.18'
                             html += '</button>'
                             html += '<div class="dropdown-menu">'
                                 html += '<div class="px-2 py-1 text-center small">'
@@ -232,21 +232,30 @@ var TplItem = function(scenario, item) {
                                     html += '<div class="col-auto">'
                                         html += '<img src="' + scenario.img + item.name + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + item.name) + '">'
                                     html += '</div>'
-                                    html += '<div class="col-auto" style="line-height:27.6px;">'
-                                        html += '<small class="opacity-50">x</small> <span id="itemCount-' + item.id + '"></span>'
-                                        if (item.max != Infinity) html += ' <small>/' + formatNumber(item.max) + '</small>'
-                                    html += '</div>'
+                                    if (item.cat != 'energy') {
+                                        html += '<div class="col-auto" style="line-height:27.6px;">'
+                                            html += '<small class="opacity-50">x</small> <span id="itemCount-' + item.id + '"></span>'
+                                            if (item.max != Infinity) html += ' <small>/' + formatNumber(item.max) + '</small>'
+                                        html += '</div>'
+                                    }
+                                    else {
+                                        html += '<div class="col-auto">'
+                                            html += '<span id="itemEnergyBalance-' + item.id + '"></span>'
+                                        html += '</div>'
+                                    }
                                 html += '</div>'
                             html += '</div>'
                             if (machine.unlocked) {
                                 html += '<div class="ms-auto col-auto">'
                                     html += '<div id="itemProduction-' + item.id + '" class="row gx-2 align-items-center">'
-                                        html += '<div class="col-auto text-end" style="width:55px;">'
-                                            html += '<small id="itemRemainingTime-' + item.id + '"></small>'
-                                            html += '<div class="progress" style="height:3px;">'
-                                                html += '<div id="itemProgress-' + item.id + '" class="progress-bar bg-success" style="width:0%;"></div>'
+                                        if (item.time) {
+                                            html += '<div class="col-auto text-end" style="width:55px;">'
+                                                html += '<small id="itemRemainingTime-' + item.id + '"></small>'
+                                                html += '<div class="progress" style="height:3px;">'
+                                                    html += '<div id="itemProgress-' + item.id + '" class="progress-bar bg-success" style="width:0%;"></div>'
+                                                html += '</div>'
                                             html += '</div>'
-                                        html += '</div>'
+                                        }
                                         html += '<div class="col-auto">'
                                             html += '<div class="row gx-1 align-items-center justify-content-end">'
                                                 html += '<div class="col-auto">'
@@ -533,6 +542,11 @@ class ScreenGame {
                                                             html += '<span id="navItemAvailableCount-' + item.id + '"></span>'
                                                         html += '</div>'
                                                     }
+                                                    else if (item.cat == 'energy') {
+                                                        html += '<div class="col-auto">'
+                                                            html += '<span id="navItemEnergyBalance-' + item.id + '"></span>'
+                                                        html += '</div>'
+                                                    }
                                                     //---
                                                     item.toRefreshCount = true
                                                     this.refreshNavList.push(item)
@@ -603,6 +617,29 @@ class ScreenGame {
                                     html += '</div>'
                                 html += '</div>'
                             }
+                        }
+                        else if (item.energies) {
+                            html += '<div class="col-12">'
+                                html += '<div class="pb-2">'
+                                    html += '<div class="row gx-2 align-items-center">'
+                                        html += '<div class="col-auto">'
+                                            html += '<span>' + i18next.t('word-energy') + '</span>'
+                                        html += '</div>'
+                                        for (let id in item.energies) {
+                                            html += '<div class="col-auto">'
+                                                html += '<div class="row gx-1 align-items-center justify-content-end">'
+                                                    html += '<div class="col-auto">'
+                                                        html += '<img src="' + scenario.img + id + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + id) + '">'
+                                                    html += '</div>'
+                                                    html += '<div class="col-auto">'
+                                                        html += '<span class="text-white">' + (item.energies[id] > 0 ? '+' : '') + formatNumber(item.energies[id]) + ' <small class="opacity-50">/s</small></span>'
+                                                    html += '</div>'
+                                                html += '</div>'
+                                            html += '</div>'
+                                        }
+                                    html += '</div>'
+                                html += '</div>'
+                            html += '</div>'
                         }
                         html += TplItem(scenario, item)
                     html += '</div>'
@@ -701,6 +738,21 @@ class ScreenGame {
             else value = item.count
             //---                
             html = formatNumber(value)
+            if (node.innerHTML != html) node.innerHTML = html
+            //---
+            style = 'text-normal'
+            if (value > 0) style = 'text-white'
+            if (node.className != style) node.className = style
+        }
+        
+        // Item energy balance
+        //---
+        node = document.getElementById('itemEnergyBalance-' + item.id)
+        if (node) {
+            //---
+            value = item.balance
+            //---
+            html = (value > 0 ? '+' : '') + formatNumber(value) + ' <small class="opacity-50">/s</small>'
             if (node.innerHTML != html) node.innerHTML = html
             //---
             style = 'text-normal'
@@ -857,14 +909,29 @@ class ScreenGame {
                     if (item.machineCount > 0) style = 'badge text-bg-success'
                     if (node.className != style) node.className = style
                 }
-
-                // Nav item machine using
+                
                 //---
-                node = document.getElementById('machineUsing-' + item.id)
-                //---
-                style = 'd-none'
-                if (window.app.game.getTotalMachineCount(item) > 0) style = 'rotate'
-                if (node.className != style) node.className = style
+                if (item.cat == 'energy') {
+                    
+                    // Nav item energy balance
+                    //---
+                    node = document.getElementById('navItemEnergyBalance-' + item.id)
+                    //---
+                    value = item.balance
+                    //---
+                    html = (value > 0 ? '+' : '') + formatNumber(value) + ' <small class="opacity-50">/s</small>'
+                    if (node.innerHTML != html) node.innerHTML = html
+                }
+                else {
+                    
+                    // Nav item machine using
+                    //---
+                    node = document.getElementById('machineUsing-' + item.id)
+                    //---
+                    style = 'd-none'
+                    if (window.app.game.getTotalMachineCount(item) > 0) style = 'rotate'
+                    if (node.className != style) node.className = style
+                }
             })
             
             // Selected item pane

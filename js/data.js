@@ -1,7 +1,7 @@
 //---
 var DATA = {
     //---
-    categories:[ 'mission','machine','tech' ],
+    categories:[ 'mission','energy','machine','tech' ],
     //---
     scenarios:[
         //---
@@ -22,20 +22,30 @@ var DATA = {
                 { id:'mission-rocket',              cat:'mission',  recipeId:'mission-rocket',              max:100,    hasUnlocks:true, toComplete:true, desc:true },
                 { id:'mission-satellite',           cat:'mission',  recipeId:'mission-satellite',           max:1,      hasUnlocks:true, toComplete:true, desc:true },
                 
+                // Energy
+                //---
+                { id:'electricity',                 cat:'energy',   recipeId:'electricity'                  },
+                { id:'steam',                       cat:'energy',   recipeId:'steam'                        },
+                { id:'energy-water',                cat:'energy',   recipeId:'energy-water'                 },
+                { id:'energy-coal',                 cat:'energy',   recipeId:'energy-coal'                  },
+                
                 // Machines
                 //---
-                { id:'manual',                      cat:'machine',  recipeId:'manual',                      count:1 },
-                { id:'furnace',                     cat:'machine',  recipeId:'furnace',                     count:1 },
-                { id:'miner',                       cat:'machine',  recipeId:'miner',                       count:1 },
-                { id:'assembler',                   cat:'machine',  recipeId:'assembler',                   count:1 },
-                { id:'lab',                         cat:'machine',  recipeId:'lab',                         count:1 },
-                { id:'pump',                        cat:'machine',  recipeId:'pump'                         },
-                { id:'pumpjack',                    cat:'machine',  recipeId:'pumpjack'                     },
-                { id:'refinery',                    cat:'machine',  recipeId:'refinery'                     },
-                { id:'chemical-plant',              cat:'machine',  recipeId:'chemical-plant'               },
-                { id:'assembler-2',                 cat:'machine',  recipeId:'assembler-2'                  },
-                { id:'rocket-silo',                 cat:'machine',  recipeId:'rocket-silo'                  },
-                { id:'assembler-3',                 cat:'machine',  recipeId:'assembler-3'                  },
+                { id:'manual',                      cat:'machine',  recipeId:'manual',                                  count:1,    },
+                { id:'furnace',                     cat:'machine',  recipeId:'furnace',                     desc:true,  count:1,    energies:{ 'energy-coal':-0.0225 } },
+                { id:'miner-coal',                  cat:'machine',  recipeId:'miner-coal',                              count:1,    energies:{ 'energy-coal':1 } },
+                { id:'miner',                       cat:'machine',  recipeId:'miner',                                   count:1,    energies:{ 'energy-coal':-0.15 } },
+                { id:'assembler',                   cat:'machine',  recipeId:'assembler',                   desc:true,  count:1,    energies:{ 'electricity':-75 } },
+                { id:'boiler',                      cat:'machine',  recipeId:'boiler',                                  count:1,    energies:{ 'steam':60, 'energy-water':-60, 'energy-coal':-0.015 } },
+                { id:'steam-engine',                cat:'machine',  recipeId:'steam-engine',                            count:1,    energies:{ 'electricity':900, 'steam':-30 } },
+                { id:'lab',                         cat:'machine',  recipeId:'lab',                                     count:1,    energies:{ 'electricity':-60 } },
+                { id:'pump',                        cat:'machine',  recipeId:'pump',                                    count:1,    energies:{ 'energy-water':100 } },
+                { id:'pumpjack',                    cat:'machine',  recipeId:'pumpjack',                                            energies:{ 'electricity':-90 } },
+                { id:'refinery',                    cat:'machine',  recipeId:'refinery',                                            energies:{ 'electricity':-420 } },
+                { id:'chemical-plant',              cat:'machine',  recipeId:'chemical-plant',                                      energies:{ 'electricity':-210 } },
+                { id:'assembler-2',                 cat:'machine',  recipeId:'assembler-2',                                         energies:{ 'electricity':-150 } },
+                { id:'rocket-silo',                 cat:'machine',  recipeId:'rocket-silo',                                         energies:{ 'electricity':-4e3 } },
+                { id:'assembler-3',                 cat:'machine',  recipeId:'assembler-3',                                         energies:{ 'electricity':-375 } },
 
                 // Techs
                 //---
@@ -120,14 +130,24 @@ var DATA = {
                 { id:'mission-rocket',              reqs:{ 'mission-spidertron':1 },            machineId:'rocket-silo',        time:3,         output:1,   inputs:{ 'rocket-fuel':10, 'solid-fuel':100, 'rocket-control-unit':10, 'low-density-structure':10, 'speed-module':10, 'sulfuric-acid':50, 'sulfur':5, 'plastic':190, 'petrol':1975, 'light-oil':1771, 'heavy-oil':695, 'oil':2778, 'water':2756, 'coal':95, 'circuit-3':10, 'circuit-2':70, 'circuit':390, 'cable':1450, 'copper-plate':925, 'copper':925, 'steel':20, 'iron-plate':491, 'iron':491 } },
                 { id:'mission-satellite',           reqs:{ 'mission-rocket':1 },                machineId:'assembler-3',        time:5,         output:1,   inputs:{ 'accumulator':100, 'solar-panel':100, 'rocket-fuel':50, 'solid-fuel':500, 'low-density-structure':100, 'battery':500, 'sulfuric-acid':10500, 'sulfur':1050, 'plastic':900, 'petrol':24750, 'light-oil':18581, 'heavy-oil':7287, 'oil':29146, 'water':69868, 'coal':450, 'circuit-3':100, 'circuit-2':200, 'circuit':3925, 'cable':12575, 'copper-plate':9288, 'copper':9288, 'steel':700, 'radar':5, 'gear':25, 'iron-plate':8435, 'iron':8435 } },
                 
+                // Energy
+                //---
+                { id:'electricity',                 reqs:{ 'mission-assembler':1 },             machineId:'steam-engine'        },
+                { id:'steam',                       reqs:{ 'mission-assembler':1 },             machineId:'boiler'              },
+                { id:'energy-water',                reqs:{ 'mission-assembler':1 },             machineId:'pump'                },
+                { id:'energy-coal',                                                             machineId:'miner-coal'          },
+                
                 // Machines
                 //---
                 { id:'manual',                      },
                 { id:'furnace',                     reqs:{ 'mission-furnace':1 },               machineId:'manual',             time:0.5,       output:1,   inputs:{ 'stone':5 } },
                 { id:'miner',                                                                   machineId:'manual',             time:5,         output:1,   inputs:{ 'gear':3, 'iron-plate':9, 'iron':9, 'stone':5 } },
+                { id:'miner-coal',                                                              machineId:'manual',             time:5,         output:1,   inputs:{ 'gear':3, 'iron-plate':9, 'iron':9, 'stone':5 } },
                 { id:'assembler',                   reqs:{ 'mission-assembler':1 },             machineId:'manual',             time:7,         output:1,   inputs:{ 'circuit':3, 'cable':9, 'copper-plate':5, 'copper':5, 'gear':5, 'iron-plate':22, 'iron':22 } },
+                { id:'boiler',                      reqs:{ 'mission-assembler':1 },             machineId:'manual',             time:0.5,       output:1,   inputs:{ 'pipe':4, 'iron-plate':4, 'iron':4, 'stone':5 } },
+                { id:'steam-engine',                reqs:{ 'mission-assembler':1 },             machineId:'manual',             time:0.5,       output:1,   inputs:{ 'pipe':5, 'gear':8, 'iron-plate':31, 'iron':31 } },
                 { id:'lab',                         reqs:{ 'mission-lab':1 },                   machineId:'manual',             time:2,         output:1,   inputs:{ 'circuit':10, 'cable':30, 'copper-plate':15, 'copper':15, 'belt':4, 'gear':12, 'iron-plate':36, 'iron':36  } },
-                { id:'pump',                        reqs:{ 'oil-tech':1 },                      machineId:'manual',             time:0.5,       output:1,   inputs:{ 'circuit':2, 'cable':6, 'copper-plate':3, 'copper':3, 'pipe':1, 'gear':1, 'iron-plate':5, 'iron':5  } },
+                { id:'pump',                        reqs:{ 'mission-assembler':1 },             machineId:'manual',             time:0.5,       output:1,   inputs:{ 'circuit':2, 'cable':6, 'copper-plate':3, 'copper':3, 'pipe':1, 'gear':1, 'iron-plate':5, 'iron':5  } },
                 { id:'pumpjack',                    reqs:{ 'oil-tech':1 },                      machineId:'manual',             time:5,         output:1,   inputs:{ 'circuit':5, 'cable':15, 'copper-plate':8, 'copper':8, 'steel':5, 'pipe':10, 'gear':10, 'iron-plate':60, 'iron':60  } },
                 { id:'refinery',                    reqs:{ 'oil-tech':1 },                      machineId:'manual',             time:8,         output:1,   inputs:{ 'circuit':10, 'cable':30, 'copper-plate':15, 'copper':15, 'steel':15, 'pipe':10, 'gear':10, 'iron-plate':115, 'iron':115, 'brick':10, 'stone':20 } },                
                 { id:'chemical-plant',              reqs:{ 'oil-tech':1 },                      machineId:'manual',             time:5,         output:1,   inputs:{ 'circuit':5, 'cable':15, 'copper-plate':8, 'copper':8, 'steel':5, 'pipe':5, 'gear':5, 'iron-plate':45, 'iron':45  } },
