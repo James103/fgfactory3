@@ -23,7 +23,7 @@ var TplScreenGame = function(data) {
                     html += '<div class="col-auto">'
                         html += '<div class="dropdown">'
                             html += '<button type="button" class="btn btn-outline-danger" data-bs-toggle="dropdown" aria-expanded="false">'
-                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.16'
+                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.17'
                             html += '</button>'
                             html += '<div class="dropdown-menu">'
                                 html += '<div class="px-2 py-1 text-center small">'
@@ -98,7 +98,7 @@ var TplScreenGame = function(data) {
                 html += '<div class="p-2">'
                     html += '<div class="row g-2">'
                         html += '<div class="col-12">'
-                            html += '<span class="fs-6">' + i18next.t('word-language') + '</span>'
+                            html += '<span class="fs-6 text-white">' + i18next.t('word-language') + '</span>'
                         html += '</div>'
                         html += '<div class="col-auto">'
                             html += '<button type="button" class="btn btn-light' + (i18next.language == 'en-US' ? ' border-warning' : '') + '" onclick="window.app.changeLocale(\'en-US\')">'
@@ -110,7 +110,7 @@ var TplScreenGame = function(data) {
                 html += '<div class="p-2">'
                     html += '<div class="row gy-2 gx-3 align-items-center">'
                         html += '<div class="col-12">'
-                            html += '<span class="fs-6">' + i18next.t('word-options') + '</span>'
+                            html += '<span class="fs-6 text-white">' + i18next.t('word-options') + '</span>'
                         html += '</div>'
                         html += '<div class="col-12 col-md-auto">'
                             html += '<div class="form-check">'
@@ -129,7 +129,7 @@ var TplScreenGame = function(data) {
                 html += '<div class="p-2">'
                     html += '<div class="row g-2">'
                         html += '<div class="col-12">'
-                            html += '<span class="fs-6">' + i18next.t('word-local-data') + '</span>'
+                            html += '<span class="fs-6 text-white">' + i18next.t('word-local-data') + '</span>'
                         html += '</div>'
                         html += '<div class="col-12 col-md-6">'
                             html += '<div class="card card-body">'
@@ -226,15 +226,15 @@ var TplItem = function(scenario, item) {
                 html += '<div class="card card-body">'
                     html += '<div class="row gx-3 gy-2 align-items-center">'
                         if (item.unlocked) {
-                            let machine = window.app.game.getItem(item.machine)
+                            let machine = window.app.game.getItem(item.machineId)
                             html += '<div class="col">'
                                 html += '<div class="row gx-1 align-items-center">'
                                     html += '<div class="col-auto">'
                                         html += '<img src="' + scenario.img + item.name + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + item.name) + '">'
                                     html += '</div>'
-                                    html += '<div class="col-auto">'
+                                    html += '<div class="col-auto" style="line-height:27.6px;">'
                                         html += '<small class="opacity-50">x</small> <span id="itemCount-' + item.id + '"></span>'
-                                        if (item.stack != Infinity) html += ' <small>/' + formatNumber(item.stack) + '</small>'
+                                        if (item.max != Infinity) html += ' <small>/' + formatNumber(item.max) + '</small>'
                                     html += '</div>'
                                 html += '</div>'
                             html += '</div>'
@@ -250,9 +250,9 @@ var TplItem = function(scenario, item) {
                                         html += '<div class="col-auto">'
                                             html += '<div class="row gx-1 align-items-center justify-content-end">'
                                                 html += '<div class="col-auto">'
-                                                    html += '<img src="' + scenario.img + item.machine + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + item.machine) + '">'
+                                                    html += '<img src="' + scenario.img + item.machineId + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + item.machineId) + '">'
                                                 html += '</div>'
-                                                if (item.machine != 'manual') {
+                                                if (item.machineId != 'manual') {
                                                     html += '<div class="col-auto">'
                                                         html += '<span><small class="opacity-50">x</small> <span id="itemMachineCount-' + item.id + '"></span></span>'
                                                     html += '</div>'
@@ -263,13 +263,13 @@ var TplItem = function(scenario, item) {
                                             html += '<div class="row gx-1 align-items-center justify-content-end">'
                                                 html += '<div class="col-auto">'
                                                     html += '<button type="button" id="itemRemoveMachineBtn-' + item.id + '" class="btn btn-outline-danger" onclick="window.app.doClick(\'removeMachineCount\', { itemId:\'' + item.id + '\' })">'
-                                                        if (item.machine != 'manual') html += '<i class="fas fa-fw fa-minus-circle"></i>'
+                                                        if (item.machineId != 'manual') html += '<i class="fas fa-fw fa-minus-circle"></i>'
                                                         else html += '<i class="fas fa-fw fa-stop"></i>'
                                                     html += '</button>'
                                                 html += '</div>'
                                                 html += '<div class="col-auto">'
                                                     html += '<button type="button" id="itemAddMachineBtn-' + item.id + '" class="btn btn-outline-warning" onclick="window.app.doClick(\'addMachineCount\', { itemId:\'' + item.id + '\' })">'
-                                                        if (item.machine != 'manual') html += '<i class="fas fa-fw fa-plus-circle"></i>'
+                                                        if (item.machineId != 'manual') html += '<i class="fas fa-fw fa-plus-circle"></i>'
                                                         else html += '<i class="fas fa-fw fa-play"></i>'
                                                     html += '</button>'
                                                 html += '</div>'
@@ -285,21 +285,23 @@ var TplItem = function(scenario, item) {
                                             html += '<i class="fas fa-lock"></i>'
                                         html += '</div>'
                                         html += '<div class="col-auto">'
-                                            html += '<span>' + i18next.t(scenario.label + machine.name) + '</span>'
+                                            html += '<span>' + i18next.t(scenario.label + machine.id) + '</span>'
                                         html += '</div>'
                                     html += '</div>'
                                 html += '</div>'
                             }
                         }
                         else {
-                            html += '<div class="col-auto">'
+                            html += '<div class="col-auto" style="line-height:27.6px;">'
                                 html += '<div class="row gx-2 align-items-center justify-content-end">'
                                     html += '<div class="col-auto">'
                                         html += '<i class="fas fa-lock"></i>'
                                     html += '</div>'
-                                    html += '<div class="col-auto">'
-                                        html += '<span>' + i18next.t(scenario.label + item.name) + '</span>'
-                                    html += '</div>'
+                                    for (let id in item.reqs) {
+                                        html += '<div class="col-auto">'
+                                            html += '<span>' + i18next.t(scenario.label + id) + '</span>'
+                                        html += '</div>'
+                                    }
                                 html += '</div>'
                             html += '</div>'
                         }
@@ -481,8 +483,6 @@ class ScreenGame {
                 //---
                 for (let id in inputs) this.doClick('assignAll', { itemId:inputs[id] })
             }
-            //---
-            window.app.game.addMachineCount(data.itemId)
         }
     }
     //---
@@ -497,7 +497,7 @@ class ScreenGame {
         html += '<div id="left-pane" class="bg-dark border-end">'
             html += '<div class="scrollbar nav nav-pills flex-column flex-nowrap">'
                 DATA.categories.forEach(cat => {
-                    items = window.app.game.currentItems.filter(item => item.id != 'manual' && item.cat == cat && (this.showLocked ? true : item.unlocked) && (this.showCompleted ? true : (item.stack && item.count < item.stack)))
+                    items = window.app.game.currentItems.filter(item => item.id != 'manual' && item.cat == cat && (this.showLocked ? true : item.unlocked) && (this.showCompleted ? true : (item.max && item.count < item.max)))
                     if (items.length > 0) {
                         html += '<div class="w-100 p-2">'
                             html += '<div class="row g-1">'
@@ -506,19 +506,19 @@ class ScreenGame {
                                 html += '</div>'
                                 items.forEach(item => {
                                     html += '<div class="col-12 nav-item position-relative">'
-                                        html += '<button class="w-100 position-relative nav-link' + (item.id == this.selectedItemId ? ' active' : '') + (!item.unlocked || (item.stack && item.count >= item.stack) ? ' disabled' : '') + '" id="' + item.id + '-tab" data-bs-toggle="tab" data-bs-target="#' + item.id + '-tab-pane" type="button" role="tab" aria-controls="' + item.id + '-tab-pane" onclick="window.app.doClick(\'selectItem\', { itemId:\'' + item.id + '\' })">'
+                                        html += '<button class="w-100 position-relative nav-link' + (item.id == this.selectedItemId ? ' active' : '') + (!item.unlocked || (item.max && item.count >= item.max) ? ' disabled' : '') + '" id="' + item.id + '-tab" data-bs-toggle="tab" data-bs-target="#' + item.id + '-tab-pane" type="button" role="tab" aria-controls="' + item.id + '-tab-pane" onclick="window.app.doClick(\'selectItem\', { itemId:\'' + item.id + '\' })">'
                                             html += '<div class="row gx-2 align-items-center">'
                                                 if (item.unlocked) {
                                                     html += '<div class="col-auto">'
-                                                        html += '<img src="' + scenario.img + item.name + '.png" width="24px" height="24px">'
+                                                        html += '<img src="' + scenario.img + item.id + '.png" width="24px" height="24px">'
                                                     html += '</div>'
                                                     html += '<div class="col text-start text-truncate">'
-                                                        html += '<span>' + i18next.t(scenario.label + item.name) + '</span>'
+                                                        html += '<span>' + i18next.t(scenario.label + item.id) + '</span>'
                                                     html += '</div>'
                                                     html += '<div class="col-auto">'
                                                         html += '<div id="machineUsing-' + item.id + '" class="d-none"><i class="fas fa-spinner text-success"></i></div>'
                                                     html += '</div>'
-                                                    if (item.stack && item.count >= item.stack) {
+                                                    if (item.max && item.count >= item.max) {
                                                         html += '<div class="col-auto">'
                                                             html += '<span class="badge text-bg-success"><i class="fas fa-check-circle"></i></span>'
                                                         html += '</div>'
@@ -542,7 +542,7 @@ class ScreenGame {
                                                         html += '<i class="fas fa-lock"></i>'
                                                     html += '</div>'
                                                     html += '<div class="col-auto me-auto">'
-                                                        html += '<span>' + i18next.t(scenario.label + item.name) + '</span>'
+                                                        html += '<span>' + i18next.t(scenario.label + item.id) + '</span>'
                                                     html += '</div>'
                                                 }
                                             html += '</div>'
@@ -565,10 +565,10 @@ class ScreenGame {
                             html += '<div class="pb-2">'
                                 html += '<div class="row gx-2 align-items-center">'
                                     html += '<div class="col-auto">'
-                                        html += '<img src="' + scenario.img + item.name + '.png" width="24px" height="24px">'
+                                        html += '<img src="' + scenario.img + item.id + '.png" width="24px" height="24px">'
                                     html += '</div>'
                                     html += '<div class="col-auto">'
-                                        html += '<span class="fs-6 text-white">' + i18next.t(scenario.label + item.name) + '</span>'
+                                        html += '<span class="fs-6 text-white">' + i18next.t(scenario.label + item.id) + '</span>'
                                     html += '</div>'
                                     if (item.cat == 'machine') {
                                         html += '<div class="col-auto">'
@@ -596,7 +596,7 @@ class ScreenGame {
                                             html += '</div>'
                                             unlocks.forEach(unlock => {
                                                 html += '<div class="col-auto">'
-                                                    html += '<img src="' + scenario.img + unlock.name + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + unlock.name) + '">'
+                                                    html += '<img src="' + scenario.img + unlock.id + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + unlock.id) + '">'
                                                 html += '</div>'
                                             })
                                         html += '</div>'
@@ -654,7 +654,7 @@ class ScreenGame {
         html += '<div class="p-2">'
             html += '<div class="row g-2">'
                 html += '<div class="col-12">'
-                    html += '<span class="fs-6">' + i18next.t('word-scenarios') + '</span>'
+                    html += '<span class="fs-6 text-white">' + i18next.t('word-scenarios') + '</span>'
                 html += '</div>'
                 //---
                 let scenarios = window.app.game.scenarios
@@ -663,7 +663,16 @@ class ScreenGame {
                         html += '<button type="button" class="w-100 btn btn-light text-start' + (scenario.id == window.app.game.currentScenario.id ? ' border-warning' : '') + '" onclick="window.app.doClick(\'selectScenario\', { scenarioId:\'' + scenario.id + '\' })">'
                             html += '<div class="row g-1 justify-content-center">'
                                 html += '<div class="col-12">'
-                                    html += '<span class="fs-6 text-white">' + i18next.t(scenario.label + 'name') + '</span>'
+                                    html += '<div class="row gx-2 align-items-center">'
+                                        html += '<div class="col">'
+                                            html += '<span class="fs-6 text-white">' + i18next.t(scenario.label + 'name') + '</span>'
+                                        html += '</div>'
+                                        if (scenario.victoryDate) {
+                                            html += '<div class="col-auto">'
+                                                html += '<img src="img/victory.png" width="16px" height="16px" />'
+                                            html += '</div>'
+                                        }
+                                    html += '</div>'
                                 html += '</div>'
                                 html += '<div class="col-12 small">'
                                     html += '<span class="text-normal">' + i18next.t(scenario.label + 'desc') + '</span>'
@@ -715,7 +724,7 @@ class ScreenGame {
         }
 
         //---
-        if (item.toComplete && item.stack != Infinity && item.totalCount >= item.stack) {
+        if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) {
             
             // Item production
             //---
@@ -771,7 +780,7 @@ class ScreenGame {
             //---
             node = document.getElementById('itemRemainingTime-' + item.id)
             if (node) {
-                if (item.toComplete && item.stack != Infinity && item.totalCount >= item.stack) {
+                if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) {
                     //---
                     html = i18next.t('word-done')
                     if (node.innerHTML != html) node.innerHTML = html
@@ -797,7 +806,7 @@ class ScreenGame {
             //---
             node = document.getElementById('itemProgress-' + item.id)
             if (node) {
-                if (item.toComplete && item.stack != Infinity && item.totalCount >= item.stack) {
+                if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) {
                     //---
                     style = 'd-none'
                     if (node.className != style) node.className = style

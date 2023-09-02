@@ -477,6 +477,9 @@ a:hover { color: var(--bs-link-hover-color); }
     #right-pane { padding-left: 320px; }
 }
 
+@media (min-width: 1200px) { .container { max-width: 960px; } }
+@media (min-width: 1400px) { .container { max-width: 960px; } }
+
 ////////////////////////////////////////////////////////////////////////////////
 
 @keyframes flicker {
