@@ -48,6 +48,12 @@ class GameItem {
         //---
         this.max = this.initData.max ? this.initData.max : Infinity
         //---
+        if (recipe.output && this.max !== Infinity) {
+            if (this.max % recipe.output !== 0) {
+                this.max = recipe.output * Math.ceil(this.max / recipe.output)
+            }
+        }
+        //---
         this.count = this.initData.count ? this.initData.count : 0
         this.toComplete = this.initData.toComplete ? this.initData.toComplete : false
         //---
