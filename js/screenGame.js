@@ -249,7 +249,7 @@ var TplItem = function(scenario, item) {
                                 html += '<div class="ms-auto col-auto">'
                                     html += '<div id="itemProduction-' + item.id + '" class="row gx-2 align-items-center">'
                                         if (item.time) {
-                                            html += '<div class="col-auto text-end" style="width:55px;">'
+                                            html += '<div class="col-auto text-end" style="min-width:55px;">'
                                                 html += '<small id="itemRemainingTime-' + item.id + '"></small>'
                                                 html += '<div class="progress" style="height:3px;">'
                                                     html += '<div id="itemProgress-' + item.id + '" class="progress-bar bg-success" style="width:0%;"></div>'
