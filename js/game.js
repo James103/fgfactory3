@@ -65,7 +65,6 @@ class GameItem {
         //---
         this.machineId = recipe.machineId
         this.machineCount = 0
-        this.selectMachineCount = '1'
         //---
         this.balance = 0
         //---
@@ -106,7 +105,6 @@ class GameItem {
         if (data.totalCount != null) this.totalCount = data.totalCount
         if (data.machineCount != null) this.machineCount = data.machineCount
         if (data.remainingTime != null) this.remainingTime = data.remainingTime
-        if (data.selectMachineCount != null) this.selectMachineCount = data.selectMachineCount
         //---
         if (this.toComplete && this.totalCount > this.max) {
             this.count += this.totalCount - this.max
@@ -126,27 +124,26 @@ class GameItem {
         savedData.totalCount = this.totalCount
         savedData.machineCount = this.machineCount
         savedData.remainingTime = this.remainingTime
-        savedData.selectMachineCount = this.selectMachineCount
         //---
         return savedData
     }
     //---
     getAddMachineCount(game) {
         //---
-        if (this.selectMachineCount == '1') return Math.min(game.getAvailableCount(this.machineId), 1)
-        else if (this.selectMachineCount == '5') return Math.min(game.getAvailableCount(this.machineId), 5)
-        else if (this.selectMachineCount == '10') return Math.min(game.getAvailableCount(this.machineId), 10)
-        else if (this.selectMachineCount == '100') return Math.min(game.getAvailableCount(this.machineId), 100)
-        else if (this.selectMachineCount == 'max') return game.getAvailableCount(this.machineId)
+        if (game.selectedMachineCount == '1') return Math.min(game.getAvailableCount(this.machineId), 1)
+        else if (game.selectedMachineCount == '5') return Math.min(game.getAvailableCount(this.machineId), 5)
+        else if (game.selectedMachineCount == '10') return Math.min(game.getAvailableCount(this.machineId), 10)
+        else if (game.selectedMachineCount == '100') return Math.min(game.getAvailableCount(this.machineId), 100)
+        else if (game.selectedMachineCount == 'max') return game.getAvailableCount(this.machineId)
     }
     //---
-    getRemoveMachineCount() {
+    getRemoveMachineCount(game) {
         //---
-        if (this.selectMachineCount == '1') return Math.min(this.machineCount, 1)
-        else if (this.selectMachineCount == '5') return Math.min(this.machineCount, 5)
-        else if (this.selectMachineCount == '10') return Math.min(this.machineCount, 10)
-        else if (this.selectMachineCount == '100') return Math.min(this.machineCount, 100)
-        else if (this.selectMachineCount == 'max') return this.machineCount
+        if (game.selectedMachineCount == '1') return Math.min(this.machineCount, 1)
+        else if (game.selectedMachineCount == '5') return Math.min(this.machineCount, 5)
+        else if (game.selectedMachineCount == '10') return Math.min(this.machineCount, 10)
+        else if (game.selectedMachineCount == '100') return Math.min(this.machineCount, 100)
+        else if (game.selectedMachineCount == 'max') return this.machineCount
     }
     //---
     getProgress() {
@@ -187,6 +184,8 @@ class Game {
         this.currentScenario = null
         this.currentItems = []
         //---
+        this.selectedMachineCount = '1'
+        //---
         this.victory = false
         this.victoryReqs = null
         //---
@@ -225,6 +224,8 @@ class Game {
         //---
         if (data.scenarioId) this.loadScenario(data.scenarioId)
         //---
+        if (data.selectedMachineCount != null) this.selectedMachineCount = data.selectedMachineCount
+        //---
         if (data.items) this.currentItems.forEach(item => { if (data.items[item.id]) item.load(data.items[item.id]) })
         if (data.victory) this.victory = data.victory
         if (data.scenarios) this.scenarios.forEach(scenario => { if (data.scenarios[scenario.id]) scenario.load(data.scenarios[scenario.id]) })
@@ -238,7 +239,8 @@ class Game {
         let savedData = {}
         //---
         savedData.scenarioId = this.currentScenario.id
-        savedData.manualId = this.currentManualId
+        //---
+        savedData.selectedMachineCount = this.selectedMachineCount
         //---
         savedData.victory = this.victory
         //---
@@ -248,6 +250,7 @@ class Game {
         savedData.scenarios = {}
         this.scenarios.forEach(scenario => savedData.scenarios[scenario.id] = scenario.getSaveData())
         //---
+        console.log(savedData)
         return savedData
     }
     //---
@@ -335,8 +338,8 @@ class Game {
     //---
     canProduce(item) {
         //---
-        if (item.max != Infinity && (item.count + item.output) > item.max) return false
-        if (item.toComplete && item.max != Infinity && (item.totalCount + item.output) > item.max) return false
+        if (item.max != Infinity && item.count >= item.max) return false
+        if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) return false
         //---
         if (item.inputs) {
             for (let id in item.inputs) {
@@ -452,12 +455,6 @@ class Game {
         return refresh
     }
     //---
-    setMachineSelectCount(data) {
-        //---
-        let item = this.getItem(data.itemId)
-        item.selectMachineCount = data.count
-    }
-    //---
     canAddMachineCount(item) {
         //---
         if (!item.unlocked) return false
@@ -493,7 +490,7 @@ class Game {
     //---
     canRemoveMachineCount(item) {
         //---
-        let removeCount = item.getRemoveMachineCount()
+        let removeCount = item.getRemoveMachineCount(this)
         if (item.machineCount < 1 || item.machineCount < removeCount) return false
         //---
         return true
@@ -504,7 +501,7 @@ class Game {
         let item = this.getItem(itemId)
         if (this.canRemoveMachineCount(item)) {
             //---
-            let removeCount = item.getRemoveMachineCount()
+            let removeCount = item.getRemoveMachineCount(this)
             item.machineCount -= removeCount
             item.refreshTime()
             //---

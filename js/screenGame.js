@@ -23,7 +23,7 @@ var TplScreenGame = function(data) {
                     html += '<div class="col-auto">'
                         html += '<div class="dropdown">'
                             html += '<button type="button" class="btn btn-outline-danger" data-bs-toggle="dropdown" aria-expanded="false">'
-                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.19'
+                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.20'
                             html += '</button>'
                             html += '<div class="dropdown-menu">'
                                 html += '<div class="px-2 py-1 text-center small">'
@@ -350,7 +350,6 @@ class ScreenGame {
         //---
         this.selectedTabId = 'factory'
         this.selectedItemId = 'mission-furnace'
-        this.selectedMachineCount = '1'
         //---
         this.showLocked = false
         this.showCompleted = false
@@ -362,7 +361,6 @@ class ScreenGame {
         //---
         if (data.selectedTabId != null) this.selectedTabId = data.selectedTabId
         if (data.selectedItemId != null) this.selectedItemId = data.selectedItemId
-        if (data.selectedMachineCount != null) this.selectedMachineCount = data.selectedMachineCount
         //---
         if (data.showLocked != null) this.showLocked = data.showLocked
         if (data.showCompleted != null) this.showCompleted = data.showCompleted
@@ -374,7 +372,6 @@ class ScreenGame {
         //---
         savedData.selectedTabId = this.selectedTabId
         savedData.selectedItemId = this.selectedItemId
-        savedData.selectedMachineCount = this.selectedMachineCount
         //---
         savedData.showLocked = this.showLocked
         savedData.showCompleted = this.showCompleted
@@ -444,24 +441,7 @@ class ScreenGame {
         else if (action == 'addMachineCount') window.app.game.addMachineCount(data.itemId)
         else if (action == 'removeMachineCount') window.app.game.removeMachineCount(data.itemId)
         //---
-        else if (action == 'setAllMachineSelectCount') {
-            //---
-            data.itemId = data.itemId ? data.itemId : this.selectedItemId
-            //---
-            this.selectMachineCount = data.count
-            //---
-            window.app.game.setMachineSelectCount(data)
-            //---
-            let node = document.getElementById('machineCountSelect-' + data.itemId)
-            if (node) node.value = data.count
-            //---
-            let item = window.app.game.getItem(data.itemId)
-            if (item.inputs) {
-                for (let id in item.inputs) {
-                    this.doClick('setAllMachineSelectCount', { itemId:id, count:data.count })
-                }
-            }
-        }
+        else if (action == 'setAllMachineSelectCount') window.app.game.selectedMachineCount = data.count
         //---
         else if (action == 'unassignAll') {
             //---
@@ -655,11 +635,11 @@ class ScreenGame {
                 html += '</div>'
                 html += '<div class="ms-auto col-auto">'
                     html += '<select class="form-control form-control-sm" onchange="window.app.doClick(\'setAllMachineSelectCount\', { count:this.value })">'
-                        html += '<option' + (this.selectedMachineCount == '1' ? ' selected' : '') + '  value="1">1</option>'
-                        html += '<option' + (this.selectedMachineCount == '5' ? ' selected' : '') + '  value="5">5</option>'
-                        html += '<option' + (this.selectedMachineCount == '10' ? ' selected' : '') + '  value="10">10</option>'
-                        html += '<option' + (this.selectedMachineCount == '100' ? ' selected' : '') + '  value="100">100</option>'
-                        html += '<option' + (this.selectedMachineCount == 'max' ? ' selected' : '') + '  value="max">' + i18next.t('word-max') + '</option>'
+                        html += '<option' + (window.app.game.selectedMachineCount == '1' ? ' selected' : '') + '  value="1">1</option>'
+                        html += '<option' + (window.app.game.selectedMachineCount == '5' ? ' selected' : '') + '  value="5">5</option>'
+                        html += '<option' + (window.app.game.selectedMachineCount == '10' ? ' selected' : '') + '  value="10">10</option>'
+                        html += '<option' + (window.app.game.selectedMachineCount == '100' ? ' selected' : '') + '  value="100">100</option>'
+                        html += '<option' + (window.app.game.selectedMachineCount == 'max' ? ' selected' : '') + '  value="max">' + i18next.t('word-max') + '</option>'
                     html += '</select>'
                 html += '</div>'
                 html += '<div class="col-auto">'
