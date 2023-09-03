@@ -47,7 +47,6 @@ class GameItem {
         let recipe = game.currentScenario.recipes.find(recipe => recipe.id == this.recipeId)
         //---
         this.max = this.initData.max ? this.initData.max : Infinity
-        //---
         if (recipe.output && this.max !== Infinity) {
             if (this.max % recipe.output !== 0) {
                 this.max = recipe.output * Math.ceil(this.max / recipe.output)
