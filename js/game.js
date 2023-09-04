@@ -96,6 +96,17 @@ class GameItem {
         this.time = recipe.time
         this.initTime = recipe.time
         this.remainingTime = recipe.time
+        //---
+        if (recipe.storerId) {
+            //---
+            let storage = game.getStorage(recipe.id)
+            if (!storage) {
+                //---
+                storage = new GameStorage({ id:recipe.id, reqs:recipe.reqs, storerId:recipe.storerId, stack:recipe.stack })
+                game.currentStorages.push(storage)
+                storage.reset(this)
+            }
+        }
     }
     //---
     load(data) {
@@ -177,13 +188,74 @@ class GameItem {
     }
 }
 //---
+class GameStorage {
+    //---
+    constructor(data) {
+        //---
+        this.initData = data
+        //---
+        let names = Object.getOwnPropertyNames(data) 
+        names.forEach(name => { Object.defineProperty(this, name, Object.getOwnPropertyDescriptor(data, name)) })
+    }
+    //---
+    reset(game) {
+        //---
+        this.count = this.stack
+        this.unlocked = this.reqs ? false : true
+        this.storerCount = 0
+        //---
+        this.refreshCount()
+    }
+    //---
+    load(data) {
+        //---
+        if (data.storerCount != null) this.storerCount = data.storerCount
+        //---
+        this.refreshCount()
+    }
+    //---
+    getSaveData() {
+        //---
+        let savedData = {}
+        //---
+        savedData.storerCount = this.storerCount
+        //---
+        return savedData
+    }
+    //---
+    refreshCount() {
+        //---
+        this.count = this.stack + (this.stack * this.storerCount)
+    }
+    //---
+    getAddStorerCount(game) {
+        //---
+        if (game.selectedStorerCount == '1') return Math.min(game.getAvailableCount(this.storerId), 1)
+        else if (game.selectedStorerCount == '5') return Math.min(game.getAvailableCount(this.storerId), 5)
+        else if (game.selectedStorerCount == '10') return Math.min(game.getAvailableCount(this.storerId), 10)
+        else if (game.selectedStorerCount == '100') return Math.min(game.getAvailableCount(this.storerId), 100)
+        else if (game.selectedStorerCount == 'max') return game.getAvailableCount(this.storerId)
+    }
+    //---
+    getRemoveStorerCount(game) {
+        //---
+        if (game.selectedStorerCount == '1') return Math.min(this.storerCount, 1)
+        else if (game.selectedStorerCount == '5') return Math.min(this.storerCount, 5)
+        else if (game.selectedStorerCount == '10') return Math.min(this.storerCount, 10)
+        else if (game.selectedStorerCount == '100') return Math.min(this.storerCount, 100)
+        else if (game.selectedStorerCount == 'max') return this.storerCount
+    }
+}
+//---
 class Game {
     //---
     constructor() {
         //---
         this.currentScenario = null
         this.currentItems = []
+        this.currentStorages = []
         //---
+        this.selectedStorerCount = '1'
         this.selectedMachineCount = '1'
         //---
         this.victory = false
@@ -205,6 +277,8 @@ class Game {
         this.victoryReqs = this.currentScenario.victoryReqs ? this.currentScenario.victoryReqs : null
         //---
         this.currentItems = []
+        this.currentStorages = []
+        //---
         this.currentScenario.items.forEach(data => {
             //---
             let item = new GameItem(data)
@@ -222,13 +296,14 @@ class Game {
     //---
     load(data) {
         //---
-        if (data.scenarioId) this.loadScenario(data.scenarioId)
-        //---
+        if (data.victory != null) this.victory = data.victory
+        if (data.scenarioId != null) this.loadScenario(data.scenarioId)
+        if (data.selectedStorerCount != null) this.selectedStorerCount = data.selectedStorerCount
         if (data.selectedMachineCount != null) this.selectedMachineCount = data.selectedMachineCount
         //---
-        if (data.items) this.currentItems.forEach(item => { if (data.items[item.id]) item.load(data.items[item.id]) })
-        if (data.victory) this.victory = data.victory
-        if (data.scenarios) this.scenarios.forEach(scenario => { if (data.scenarios[scenario.id]) scenario.load(data.scenarios[scenario.id]) })
+        if (data.items != null) this.currentItems.forEach(item => { if (data.items[item.id]) item.load(data.items[item.id]) })
+        if (data.storages != null) this.currentStorages.forEach(storage => { if (data.storages[storage.id]) storage.load(data.storages[storage.id]) })
+        if (data.scenarios != null) this.scenarios.forEach(scenario => { if (data.scenarios[scenario.id]) scenario.load(data.scenarios[scenario.id]) })
         //---
         this.refreshUnlocked()
         this.refreshEnergies()
@@ -240,12 +315,16 @@ class Game {
         //---
         savedData.scenarioId = this.currentScenario.id
         //---
+        savedData.selectedStorerCount = this.selectedStorerCount
         savedData.selectedMachineCount = this.selectedMachineCount
         //---
         savedData.victory = this.victory
         //---
         savedData.items = {}
         this.currentItems.forEach(item => savedData.items[item.id] = item.getSaveData())
+        //---
+        savedData.storages = {}
+        this.currentStorages.forEach(storage => savedData.storages[storage.id] = storage.getSaveData())
         //---
         savedData.scenarios = {}
         this.scenarios.forEach(scenario => savedData.scenarios[scenario.id] = scenario.getSaveData())
@@ -254,6 +333,7 @@ class Game {
     }
     //---
     getItem(itemId) { return this.currentItems.find(item => item.id == itemId) }
+    getStorage(storageId) { return this.currentStorages.find(storage => storage.id == storageId) }
     //---
     checkReqs(reqs) {
         //---
@@ -271,6 +351,7 @@ class Game {
     refreshUnlocked() {
         //---
         this.currentItems.filter(item => item.reqs).forEach(item => { item.unlocked = this.checkReqs(item.reqs) })
+        this.currentStorages.filter(storage => storage.reqs).forEach(storage => { storage.unlocked = this.checkReqs(storage.reqs) })
     }
     //---
     refreshEnergies() {
@@ -284,7 +365,7 @@ class Game {
         let machines = this.currentItems.filter(item => item.cat == 'machine')
         machines.forEach(machine => {
             //---
-            let usedCount = this.getUsedCount(machine.id)
+            let usedCount = this.getMachineUsedCount(machine.id)
             for (let id in machine.energies) {
                 //---
                 let energy = this.getItem(id)
@@ -306,7 +387,7 @@ class Game {
         this.currentScenario.victoryDate = Date.now()
     }
     //---
-    getUsedCount(itemId) {
+    getMachineUsedCount(itemId) {
         //---
         let usedCount = 0
         //---
@@ -316,12 +397,23 @@ class Game {
         return usedCount
     }
     //---
+    getStorerUsedCount(itemId) {
+        //---
+        let usedCount = 0
+        //---
+        let storages = this.currentStorages.filter(storage => storage.storerCount > 0 && storage.storerId == itemId)
+        storages.forEach(storage => { usedCount += storage.storerCount })
+        //---
+        return usedCount
+    }
+    //---
     getAvailableCount(itemId) {
         //---
         let item = this.getItem(itemId)
         //---
         let usedCount = 0
-        if (item.cat == 'machine') usedCount = this.getUsedCount(itemId)
+        if (item.cat == 'machine') usedCount = this.getMachineUsedCount(itemId)
+        else if (item.cat == 'storage') usedCount = this.getStorerUsedCount(itemId)
         //---
         return item.count - usedCount
     }
@@ -336,6 +428,9 @@ class Game {
     }
     //---
     canProduce(item) {
+        //---
+        let storage = this.getStorage(item.name)
+        if (storage && item.count >= storage.count) return false
         //---
         if (item.max != Infinity && item.count >= item.max) return false
         if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) return false
@@ -505,6 +600,48 @@ class Game {
             item.refreshTime()
             //---
             this.refreshEnergies()
+        }
+    }
+    //---
+    canAddStorerCount(storage) {
+        //---
+        if (!storage.unlocked) return false
+        //---
+        let addCount = storage.getAddStorerCount(this)
+        if (addCount <= 0) return false
+        //---
+        if (this.getAvailableCount(storage.storerId) < addCount) return false
+        //---
+        return true
+    }
+    //---
+    addStorerCount(storageId) {
+        //---
+        let storage = this.getStorage(storageId)
+        if (this.canAddStorerCount(storage)) {            
+            //---
+            let addCount = storage.getAddStorerCount(this)
+            storage.storerCount += addCount
+            storage.refreshCount()
+        }
+    }
+    //---
+    canRemoveStorerCount(storage) {
+        //---
+        let removeCount = storage.getRemoveStorerCount(this)
+        if (storage.storerCount < 1 || storage.storerCount < removeCount) return false
+        //---
+        return true
+    }
+    //---
+    removeStorerCount(storageId) {
+        //---
+        let storage = this.getStorage(storageId)
+        if (this.canRemoveStorerCount(storage)) {
+            //---
+            let removeCount = storage.getRemoveStorerCount(this)
+            storage.storerCount -= removeCount
+            storage.refreshCount()
         }
     }
 }

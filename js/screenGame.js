@@ -23,7 +23,7 @@ var TplScreenGame = function(data) {
                     html += '<div class="col-auto">'
                         html += '<div class="dropdown">'
                             html += '<button type="button" class="btn btn-outline-danger" data-bs-toggle="dropdown" aria-expanded="false">'
-                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.22'
+                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.23'
                             html += '</button>'
                             html += '<div class="dropdown-menu">'
                                 html += '<div class="px-2 py-1 text-center small">'
@@ -235,7 +235,7 @@ var TplItem = function(scenario, item) {
                                     if (item.cat != 'energy') {
                                         html += '<div class="col-auto" style="line-height:27.6px;">'
                                             html += '<small class="opacity-50">x</small> <span id="itemCount-' + item.id + '"></span>'
-                                            if (item.max != Infinity) html += ' <small>/' + formatNumber(item.max) + '</small>'
+                                            if (item.max != Infinity) html += ' <small id="itemMax-' + item.id + '">/' + formatNumber(item.max) + '</small>'
                                         html += '</div>'
                                     }
                                     else {
@@ -246,7 +246,7 @@ var TplItem = function(scenario, item) {
                                 html += '</div>'
                             html += '</div>'
                             if (machine.unlocked) {
-                                html += '<div class="ms-auto col-auto">'
+                                html += '<div class="col-auto">'
                                     html += '<div id="itemProduction-' + item.id + '" class="row gx-2 align-items-center">'
                                         if (item.time) {
                                             html += '<div class="col-auto text-end" style="min-width:55px;">'
@@ -442,7 +442,6 @@ class ScreenGame {
         else if (action == 'removeMachineCount') window.app.game.removeMachineCount(data.itemId)
         //---
         else if (action == 'setAllMachineSelectCount') window.app.game.selectedMachineCount = data.count
-        //---
         else if (action == 'unassignAll') {
             //---
             data.itemId = data.itemId ? data.itemId : this.selectedItemId
@@ -456,7 +455,6 @@ class ScreenGame {
                 }
             }
         }
-        //---
         else if (action == 'assignAll') {
             //---
             data.itemId = data.itemId ? data.itemId : this.selectedItemId
@@ -473,6 +471,11 @@ class ScreenGame {
                 for (let id in inputs) this.doClick('assignAll', { itemId:inputs[id] })
             }
         }
+        //---
+        else if (action == 'addStorerCount') window.app.game.addStorerCount(data.storageId)
+        else if (action == 'removeStorerCount') window.app.game.removeStorerCount(data.storageId)
+        //---
+        else if (action == 'setStorerSelectCount') window.app.game.selectedStorerCount = data.count
     }
     //---
     displayFactoryTab() {
@@ -512,7 +515,7 @@ class ScreenGame {
                                                             html += '<span class="badge text-bg-success"><i class="fas fa-check-circle"></i></span>'
                                                         html += '</div>'
                                                     }
-                                                    else if (item.cat == 'machine') {
+                                                    else if (item.cat == 'machine' || item.cat == 'storage') {
                                                         html += '<div class="col-auto">'
                                                             html += '<div id="manualUsing-' + item.id + '" class="d-none">'
                                                                 html += '<img src="' + scenario.img + 'manual.png" width="12px" height="12px">'
@@ -564,7 +567,7 @@ class ScreenGame {
                                     html += '<div class="col-auto">'
                                         html += '<span class="fs-6 text-white">' + i18next.t(scenario.label + item.id) + '</span>'
                                     html += '</div>'
-                                    if (item.cat == 'machine') {
+                                    if (item.cat == 'machine' || item.cat == 'storage') {
                                         html += '<div class="col-auto">'
                                             html += ' <span id="itemAvailableCount-' + item.id + '"></span>'
                                         html += '</div>'
@@ -622,6 +625,71 @@ class ScreenGame {
                             html += '</div>'
                         }
                         html += TplItem(scenario, item)
+                        if (item.cat == 'storage') {
+                            html += '<div class="col-12">'
+                                html += '<div class="pt-2 row gx-2">'
+                                    html += '<div class="col">'
+                                        html += '<span class="text-white">' + i18next.t('word-storage') + '</span>'
+                                    html += '</div>'
+                                    html += '<div class="col-auto">'
+                                        html += '<select class="form-control form-control-sm" onchange="window.app.doClick(\'setStorerSelectCount\', { count:this.value })">'
+                                            html += '<option' + (window.app.game.selectedStorerCount == '1' ? ' selected' : '') + '  value="1">1</option>'
+                                            html += '<option' + (window.app.game.selectedStorerCount == '5' ? ' selected' : '') + '  value="5">5</option>'
+                                            html += '<option' + (window.app.game.selectedStorerCount == '10' ? ' selected' : '') + '  value="10">10</option>'
+                                            html += '<option' + (window.app.game.selectedStorerCount == '100' ? ' selected' : '') + '  value="100">100</option>'
+                                            html += '<option' + (window.app.game.selectedStorerCount == 'max' ? ' selected' : '') + '  value="max">' + i18next.t('word-max') + '</option>'
+                                        html += '</select>'
+                                    html += '</div>'
+                                html += '</div>'
+                            html += '</div>'
+                            let storages = window.app.game.currentStorages.filter(storage => storage.unlocked && storage.storerId == item.id)
+                            storages.forEach(storage => {
+                                html += '<div class="col-12">'
+                                    html += '<div class="card card-body">'
+                                        html += '<div class="row gx-3 gy-2 align-items-center">'
+                                            html += '<div class="col">'
+                                                html += '<div class="row gx-1 align-items-center">'
+                                                    html += '<div class="col-auto">'
+                                                        html += '<img src="' + scenario.img + storage.id + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + storage.id) + '">'
+                                                    html += '</div>'
+                                                    html += '<div class="col-auto">'
+                                                        html += '<span id="storageCount-' + storage.id + '" class="text-white"></span>'
+                                                    html += '</div>'
+                                                html += '</div>'
+                                            html += '</div>'
+                                            html += '<div class="col-auto">'
+                                                html += '<div class="row gx-2 align-items-center">'
+                                                    html += '<div class="col-auto">'
+                                                        html += '<div class="row gx-1 align-items-center justify-content-end">'
+                                                            html += '<div class="col-auto">'
+                                                                html += '<img src="' + scenario.img + storage.storerId + '.png" width="24px" height="24px" data-bs-toggle="tooltip" data-bs-title="' + i18next.t(scenario.label + storage.storerId) + '">'
+                                                            html += '</div>'
+                                                            html += '<div class="col-auto">'
+                                                                html += '<span><small class="opacity-50">x</small> <span id="storageStorerCount-' + storage.id + '"></span></span>'
+                                                            html += '</div>'
+                                                        html += '</div>'
+                                                    html += '</div>'
+                                                    html += '<div class="col-auto">'
+                                                        html += '<div class="row gx-1 align-items-center justify-content-end">'
+                                                            html += '<div class="col-auto">'
+                                                                html += '<button type="button" id="storageRemoveStorerBtn-' + storage.id + '" class="btn btn-outline-danger" onclick="window.app.doClick(\'removeStorerCount\', { storageId:\'' + storage.id + '\' })">'
+                                                                    html += '<i class="fas fa-fw fa-arrow-circle-down"></i>'
+                                                                html += '</button>'
+                                                            html += '</div>'
+                                                            html += '<div class="col-auto">'
+                                                                html += '<button type="button" id="storageAddStorerBtn-' + storage.id + '" class="btn btn-outline-warning" onclick="window.app.doClick(\'addStorerCount\', { storageId:\'' + storage.id + '\' })">'
+                                                                    html += '<i class="fas fa-fw fa-arrow-circle-up"></i>'
+                                                                html += '</button>'
+                                                            html += '</div>'
+                                                        html += '</div>'
+                                                    html += '</div>'
+                                                html += '</div>'
+                                            html += '</div>'
+                                        html += '</div>'
+                                    html += '</div>'
+                                html += '</div>'
+                            })
+                        }
                     html += '</div>'
                 html += '</div>'
             })
@@ -722,6 +790,18 @@ class ScreenGame {
             //---
             style = 'text-normal'
             if (value > 0) style = 'text-white'
+            if (node.className != style) node.className = style
+        }
+            
+        // Item max
+        //---
+        node = document.getElementById('itemMax-' + item.id)
+        if (node) {
+            //---
+            let storage = window.app.game.getStorage(item.name)
+            //---
+            style = 'text-normal'
+            if (storage && item.max > storage.count) style = 'text-danger'
             if (node.className != style) node.className = style
         }
         
@@ -854,6 +934,63 @@ class ScreenGame {
         
         //---
         if (item.children) item.children.forEach(child => { this.refreshItem(child) })
+        
+        //---
+        if (item.cat == 'storage') {
+            let storages = window.app.game.currentStorages.filter(storage => storage.unlocked && storage.storerId == item.id)
+            storages.forEach(storage => {
+                
+                // Storage count
+                //---
+                node = document.getElementById('storageCount-' + storage.id)
+                if (node) {
+                    //---
+                    value = storage.count
+                    //---                
+                    html = formatNumber(value)
+                    if (node.innerHTML != html) node.innerHTML = html
+                }
+                
+                // Storage storer count
+                //---
+                node = document.getElementById('storageStorerCount-' + storage.id)
+                if (node) {                    
+                    //---
+                    value = storage.storerCount
+                    //---
+                    html = formatNumber(value)
+                    if (node.innerHTML != html) node.innerHTML = html
+                    //---
+                    style = 'text-normal'
+                    if (value > 0) style = 'text-white'
+                    if (node.className != style) node.className = style
+                }
+                
+                // Storage remove storer button
+                //---
+                node = document.getElementById('storageRemoveStorerBtn-' + storage.id)
+                if (node) {                    
+                    //---
+                    value = window.app.game.canRemoveStorerCount(storage)
+                    //---
+                    style = 'btn btn-outline-danger'
+                    if (value == false) style += ' disabled'
+                    if (node.className != style) node.className = style
+                }                
+            
+                // Storage add storer button
+                //---
+                node = document.getElementById('storageAddStorerBtn-' + storage.id)
+                if (node) {                    
+                    //---
+                    value = window.app.game.canAddStorerCount(storage)
+                    //---
+                    style = 'btn btn-outline-warning'
+                    if (value == false) style += ' disabled'
+                    if (node.className != style) node.className = style
+                }
+            })
+        }
     }
     //---
     refresh() {
@@ -866,7 +1003,7 @@ class ScreenGame {
             this.refreshNavList.forEach(item => {
                 
                 //---
-                if (item.cat == 'machine') {
+                if (item.cat == 'machine' || item.cat == 'storage') {
                     
                     // Nav item available count
                     //---

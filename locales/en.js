@@ -54,6 +54,7 @@ var en_translations = {
     'cat-energy': 'Energy',
     'cat-machine': 'Machines',
     'cat-mission': 'Missions',
+    'cat-storage': 'Storage',
     'cat-tech': 'Techs',
     //---
     'word-allows': 'Allows',
@@ -69,6 +70,7 @@ var en_translations = {
     'word-scenarios': 'Scenarios',
     'word-show-completed': 'Show completed objects',
     'word-show-locked': 'Show locked objects',
+    'word-storage': 'Current storages',
     'word-unassign-all': 'All',
     
     /* SCENARIO fto1 */
@@ -88,7 +90,7 @@ var en_translations = {
     'fto1-mission-lab-desc': '<div class="mb-2">Now you know how to build machine units. For more complex items, you will need to research some technologies to be able to build thems. To perform researches, you need a Lab.</div><div class="mb-2">You will be able to build multiple units of Lab like other machines.</div><div class="mb-2">Attention point: Assembling machines like other machines require Electricity as energy. Electricity is produced thank to other energies ;)</div>',
     //---
     'fto1-mission-car': 'Car',
-    'fto1-mission-car-desc': '<div class="mb-2">Car is the first complex item that you have to build. Before being able to build it, you have to perform researches with Labs.</div><div class="mb-2">Attention point: some techs may require other techs before being unlocked! ;)</div>',
+    'fto1-mission-car-desc': '<div class="mb-2">Car is the first complex item that you have to build. Before being able to build it, you have to perform researches with Labs.</div><div class="mb-2">Attention point: some techs may require other techs before being unlocked! Moreover, you may have to increase storage of some items ;)</div>',
     //---
     'fto1-mission-train': 'Train',
     'fto1-mission-train-desc': '<div class="mb-2">Trains are useful for moving large amounts of items over large distances. Locomotives are also good vehicles for you to reach fixed destinations, as they are considerably faster than the Car. Finally, Train stops, combined with Train signals and Train chain signals, are used to automate item transportation by trains by providing nameable locations for trains to travel to.</div>',
@@ -130,6 +132,10 @@ var en_translations = {
     'fto1-refinery': 'Oil refinery',
     'fto1-rocket-silo': 'Rocket silo',
     'fto1-steam-engine': 'Steam engine',
+    
+    //---
+    'fto1-barrel': 'Barrel',
+    'fto1-chest': 'Steel chest',
 
     //---
     'fto1-assembler-desc': 'This is the first available crafting machine. It is used in most recipes, including in its own recipe.',
@@ -185,7 +191,6 @@ var en_translations = {
     'fto1-grey-pack': 'Military science pack',
     'fto1-gun-turret': 'Gun turret',
     'fto1-heavy-oil': 'Heavy oil',
-    'fto1-inserter': 'Inserter',
     'fto1-iron': 'Iron ore',
     'fto1-iron-plate': 'Iron plate',
     'fto1-land-mine': 'Land mine',
@@ -267,7 +272,9 @@ var en_translations = {
     'fto1-laser-turret-tech': 'Laser turret tech',
     'fto1-low-density-structure-tech': 'Low density structure tech',
     'fto1-lubricant-tech': 'Lubricant tech',
+    'fto1-material': 'Advanced material processing',
     'fto1-material-2': 'Advanced material processing 2',
+    'fto1-modules': 'Modules',
     'fto1-military': 'Military',
     'fto1-military-2': 'Military 2',
     'fto1-military-3': 'Military 3',
