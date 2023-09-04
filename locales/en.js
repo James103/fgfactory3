@@ -123,7 +123,7 @@ var en_translations = {
     'fto1-furnace': 'Stone furnace',
     'fto1-lab': 'Lab',
     'fto1-manual': 'Steel axe',
-    'fto1-miner': 'Mining drill',
+    'fto1-miner': 'Burner mining drill',
     'fto1-miner-coal': 'Coal drill',
     'fto1-pump': 'Offshore pump',
     'fto1-pumpjack': 'Pumpjack',
@@ -133,7 +133,19 @@ var en_translations = {
 
     //---
     'fto1-assembler-desc': 'This is the first available crafting machine. It is used in most recipes, including in its own recipe.',
+    'fto1-assembler-2-desc': 'The Assembling machine 2 is an upgraded version of the Assembling machine. Unlike the Assembling machine, the Assembling machine 2 supports crafting with fluids.',
+    'fto1-assembler-3-desc': 'The Assembling machine 3 is the third and final tier of assembly machines.',
+    'fto1-boiler-desc': 'The Boiler is used to convert water into steam.',
+    'fto1-chemical-plant-desc': 'Most recipes that either require or provide a fluid other than Oil is produced by Chemical plant.',
     'fto1-furnace-desc': 'The Stone furnace is the most basic smelting machinery, providing a cheap and reliable source of basic products like Iron plates and Copper plates.',
+    'fto1-lab-desc': 'Labs are buildings that perform research for technologies by consuming science packs. Use of a Lab is required to progress.',
+    'fto1-miner-desc': 'The Burner mining drill burns fuel to mine the ore underneath the area it is placed on.',
+    'fto1-miner-coal-desc': 'Unlike Burner mining drill, the Coal drill don\'t burn fuel and mine Coal ore only.',
+    'fto1-pump-desc': 'The Offshore pump produces Water from a lake or ocean. Offshore pumps are frequently used to provide Water for Steam engines.',
+    'fto1-pumpjack-desc': 'Pumpjacks extract Oil from fields.',
+    'fto1-refinery-desc': 'The Oil Refinery processes Oil into 3 different fluids: Heavy oil, Light oil and Petrol.',
+    'fto1-rocket-silo-desc': 'The Rocket silo is required to win. Once the Rocket silo has been built and placed it can be filled with Rocket parts in order to launch the Rocket.',
+    'fto1-steam-engine-desc': 'Steam engines are the electricity generator. They produce Electricity by consuming Steam, using Water pumped that was heated to Steam with Boilers.',
     
     //---
     'fto1-accumulator': 'Accumulator',

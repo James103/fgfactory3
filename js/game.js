@@ -250,7 +250,6 @@ class Game {
         savedData.scenarios = {}
         this.scenarios.forEach(scenario => savedData.scenarios[scenario.id] = scenario.getSaveData())
         //---
-        console.log(savedData)
         return savedData
     }
     //---
