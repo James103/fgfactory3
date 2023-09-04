@@ -116,6 +116,8 @@ class GameItem {
         //---
         if (this.max != Infinity && this.count > this.max) this.count = this.max
         //---
+        if (data.machineCount <= 0) this.status = 'wait'
+        //---
         this.refreshTime()
     }
     //---
@@ -517,7 +519,7 @@ class Game {
                     //---
                     else if (this.canProduce(item)) {
                         //---
-                        if (item.inputs) {
+                        if ((item.inputs && !item.toComplete) || (item.inputs && item.toComplete && item.max != Infinity && item.count < (item.max - 1))) {
                             for (let id in item.inputs) {
                                 //---
                                 let inputElem = this.getItem(id)
@@ -589,6 +591,7 @@ class Game {
             //---
             let removeCount = item.getRemoveMachineCount(this)
             item.machineCount -= removeCount
+            if (item.machineCount <= 0) item.status = 'wait'
             item.refreshTime()
             //---
             this.refreshEnergies()
