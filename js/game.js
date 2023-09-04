@@ -56,8 +56,6 @@ class GameItem {
         this.count = this.initData.count ? this.initData.count : 0
         this.toComplete = this.initData.toComplete ? this.initData.toComplete : false
         //---
-        this.totalCount = this.count
-        //---
         this.status = 'wait'
         //---
         this.name = recipe.id
@@ -90,7 +88,7 @@ class GameItem {
             }
         }
         //---
-        if (!this.reqs) this.reqs = recipe.reqs ? recipe.reqs : null
+        this.reqs = recipe.reqs
         this.unlocked = this.reqs ? false : true
         //---
         this.time = recipe.time
@@ -113,17 +111,12 @@ class GameItem {
         //---
         if (data.count != null) this.count = data.count
         if (data.status != null) this.status = data.status
-        if (data.totalCount != null) this.totalCount = data.totalCount
         if (data.machineCount != null) this.machineCount = data.machineCount
         if (data.remainingTime != null) this.remainingTime = data.remainingTime
         //---
-        if (this.toComplete && this.totalCount > this.max) {
-            this.count += this.totalCount - this.max
-            this.totalCount = this.max
-        }
-        //---
         if (this.max != Infinity && this.count > this.max) this.count = this.max
-        if (this.totalCount < this.count) this.totalCount = this.count
+        //---
+        this.refreshTime()
     }
     //---
     getSaveData() {
@@ -132,7 +125,6 @@ class GameItem {
         //---
         savedData.count = this.count
         savedData.status = this.status
-        savedData.totalCount = this.totalCount
         savedData.machineCount = this.machineCount
         savedData.remainingTime = this.remainingTime
         //---
@@ -433,7 +425,6 @@ class Game {
         if (storage && item.count >= storage.count) return false
         //---
         if (item.max != Infinity && item.count >= item.max) return false
-        if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) return false
         //---
         if (item.inputs) {
             for (let id in item.inputs) {
@@ -457,7 +448,7 @@ class Game {
             //---
             if (item.status == 'wait' && this.canProduce(item)) {
                 //---
-                if (item.inputs) {
+                if ((item.inputs && !item.toComplete) || (item.inputs && item.toComplete && item.max != Infinity && item.count < (item.max - 1))) {
                     for (let id in item.inputs) {
                         //---
                         let inputElem = this.getItem(id)
@@ -506,12 +497,13 @@ class Game {
                     }
                     //---
                     item.count += (estimatedCycleCount + 1) * item.output
-                    if (item.max != Infinity && item.count >= item.max) item.count = item.max                    
+                    if (item.max != Infinity && item.count >= item.max) item.count = item.max
                     //---
-                    item.totalCount += (estimatedCycleCount + 1) * item.output
-                    if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) {
+                    if ((item.toComplete && !item.parentItem && item.max != Infinity && item.count >= item.max) || (item.toComplete && (item.parentItem && item.parentItem.max != Infinity && item.parentItem.count >= (item.parentItem.max - 1)) && item.max != Infinity && item.count >= item.max)) {
                         //---
-                        item.totalCount = item.max
+                        item.status = 'wait'
+                        item.remainingTime = item.time
+                        //---
                         item.unassignAll(this)
                         //---
                         if (item.hasUnlocks) {
@@ -523,7 +515,7 @@ class Game {
                         this.refreshEnergies()
                     }
                     //---
-                    if (this.canProduce(item)) {
+                    else if (this.canProduce(item)) {
                         //---
                         if (item.inputs) {
                             for (let id in item.inputs) {
@@ -552,7 +544,7 @@ class Game {
     canAddMachineCount(item) {
         //---
         if (!item.unlocked) return false
-        if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) return false
+        if (item.max != Infinity && item.totalCount >= item.max) return false
         //---
         let addCount = item.getAddMachineCount(this)
         if (addCount <= 0) return false

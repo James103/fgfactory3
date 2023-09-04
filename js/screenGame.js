@@ -23,7 +23,7 @@ var TplScreenGame = function(data) {
                     html += '<div class="col-auto">'
                         html += '<div class="dropdown">'
                             html += '<button type="button" class="btn btn-outline-danger" data-bs-toggle="dropdown" aria-expanded="false">'
-                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.23'
+                                html += '<i class="fas fa-exclamation-triangle"></i> v.dev 0.24'
                             html += '</button>'
                             html += '<div class="dropdown-menu">'
                                 html += '<div class="px-2 py-1 text-center small">'
@@ -782,8 +782,7 @@ class ScreenGame {
         node = document.getElementById('itemCount-' + item.id)
         if (node) {
             //---
-            if (item.toComplete) value = item.totalCount
-            else value = item.count
+            value = item.count
             //---                
             html = formatNumber(value)
             if (node.innerHTML != html) node.innerHTML = html
@@ -836,7 +835,7 @@ class ScreenGame {
         }
 
         //---
-        if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) {
+        if ((item.toComplete && !item.parentItem && item.max != Infinity && item.count >= item.max) || (item.toComplete && (item.parentItem && item.parentItem.max != Infinity && item.parentItem.count >= (item.parentItem.max - 1)) && item.max != Infinity && item.count >= item.max)) {
             
             // Item production
             //---
@@ -892,33 +891,23 @@ class ScreenGame {
             //---
             node = document.getElementById('itemRemainingTime-' + item.id)
             if (node) {
-                if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) {
-                    //---
-                    html = i18next.t('word-done')
-                    if (node.innerHTML != html) node.innerHTML = html
-                    //---
-                    style = 'text-success'
-                    if (node.className != style) node.className = style
-                }
-                else {
-                    //---
-                    value = item.remainingTime
-                    //---
-                    html = formatTime(value)
-                    if (node.innerHTML != html) node.innerHTML = html
-                    //---
-                    style = ''
-                    if (item.status == 'wait' && item.machineCount > 0) style = 'text-danger'
-                    else if (item.machineCount > 0) style = 'text-white'
-                    if (node.className != style) node.className = style
-                }
+                //---
+                value = item.remainingTime
+                //---
+                html = formatTime(value)
+                if (node.innerHTML != html) node.innerHTML = html
+                //---
+                style = ''
+                if (item.status == 'wait' && item.machineCount > 0) style = 'text-danger'
+                else if (item.machineCount > 0) style = 'text-white'
+                if (node.className != style) node.className = style
             }
             
             // Item progress
             //---
             node = document.getElementById('itemProgress-' + item.id)
             if (node) {
-                if (item.toComplete && item.max != Infinity && item.totalCount >= item.max) {
+                if (item.toComplete && item.max != Infinity && item.count >= item.max) {
                     //---
                     style = 'd-none'
                     if (node.className != style) node.className = style
